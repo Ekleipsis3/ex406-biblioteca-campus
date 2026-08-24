@@ -1,0 +1,14 @@
+{
+  "name": "ex406-biblioteca-campus",
+  "version": "1.0.0",
+  "description": "API da Biblioteca do Campus — Sprint de 1 hora (trio) · template de trabalho em grupo WebForge",
+  "main": "src/server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
