@@ -1,36 +1,44 @@
-const express = require("express");
-
+const express = require('express');
 const router = express.Router();
 
-// ─── Tarefa C — Sugestões de compra + votação ─────────────────────────────────
-// Armazenamento EM MEMÓRIA (não use banco de dados neste trabalho).
 const sugestoes = [];
 let proximoId = 1;
 
-// GET /sugestoes — lista as sugestões, cada uma com sua contagem de votos.
-router.get("/", (req, res) => {
-  // TODO (Tarefa C): responda 200 com o array `sugestoes`
-  //   (cada item no formato { id, titulo, votos }).
-  res.status(501).json({ erro: "não implementado" });
+router.get('/', (req, res) => {
+    res.status(200).json(sugestoes);
 });
 
-// POST /sugestoes — cria uma sugestão { titulo } (TEXTO), começando com 0 votos.
-router.post("/", (req, res) => {
-  // TODO (Tarefa C):
-  //  1. Leia titulo (texto) de req.body.
-  //  2. Se faltar titulo, responda 400.
-  //  3. Crie { id: proximoId++, titulo, votos: 0 }, adicione em `sugestoes`
-  //     e responda 201 com a sugestão criada.
-  res.status(501).json({ erro: "não implementado" });
+router.post('/', (req, res) => {
+    const { titulo } = req.body;
+
+    if (!titulo || typeof titulo !== 'string' || titulo.trim() === '') {
+        return res.status(400).json({ erro: 'O campo titulo é obrigatório e deve ser um texto válido.' });
+    }
+
+    const novaSugestao = {
+        id: proximoId++,
+        titulo: titulo.trim(),
+        votos: 0
+    };
+
+    sugestoes.push(novaSugestao);
+    res.status(201).json(novaSugestao);
 });
 
-// POST /sugestoes/voto — registra um voto na sugestão de id informado { id }.
-router.post("/voto", (req, res) => {
-  // TODO (Tarefa C):
-  //  1. Leia id de req.body.
-  //  2. Encontre a sugestão com esse id. Se não existir, responda 400.
-  //  3. Incremente votos dessa sugestão e responda 200 com a sugestão atualizada.
-  res.status(501).json({ erro: "não implementado" });
+router.post('/voto', (req, res) => {
+    const { id } = req.body;
+
+    const idBusca = Number(id);
+
+    const sugestao = sugestoes.find(s => s.id === idBusca);
+
+    if (!sugestao) {
+        return res.status(400).json({ erro: 'Sugestão com o ID fornecido não foi encontrada.' });
+    }
+
+    sugestao.votos += 1;
+
+    res.status(200).json(sugestao);
 });
 
 module.exports = router;
