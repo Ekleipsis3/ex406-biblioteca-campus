@@ -1,26 +1,30 @@
-const express = require("express");
+const express = require('express')
+const router = express.Router()
 
-const router = express.Router();
+const membros = []
 
-// ─── Tarefa B — Membros ───────────────────────────────────────────────────────
-// Armazenamento EM MEMÓRIA (não use banco de dados neste trabalho).
-const membros = [];
-let proximoId = 1;
+router.get('/', (req, res) => {
+  res.status(200).json(membros)
+})
 
-// GET /membros — lista todos os membros cadastrados.
-router.get("/", (req, res) => {
-  // TODO (Tarefa B): responda com status 200 e o array `membros`.
-  res.status(501).json({ erro: "não implementado" });
-});
+router.post('/', (req, res) => {
+  const { nome, matricula } = req.body
 
-// POST /membros — cadastra um membro { nome, matricula } (ambos TEXTO/string).
-router.post("/", (req, res) => {
-  // TODO (Tarefa B):
-  //  1. Leia nome (texto) e matricula (texto) de req.body.
-  //  2. Se faltar nome OU matricula, responda 400.
-  //  3. Crie { id: proximoId++, nome, matricula }, adicione em `membros`
-  //     e responda 201 com o membro criado.
-  res.status(501).json({ erro: "não implementado" });
-});
+  if (!nome || !matricula) {
+    return res.status(400).json({
+      erro: 'nome e matricula são obrigatórios'
+    })
+  }
 
-module.exports = router;
+  const membro = {
+    id: membros.length + 1,
+    nome,
+    matricula
+  }
+
+  membros.push(membro)
+
+  return res.status(201).json(membro)
+})
+
+module.exports = router
